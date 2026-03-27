@@ -6,6 +6,7 @@ import {
   crearTarea,
   deleteTarea,
   selectTareasPorId,
+  selectTareasPorProyecto,
   validarDuenoTarea,
   validarProjectId,
   validarTarea,
@@ -146,5 +147,23 @@ export async function deleteTareaService(id_tarea) {
     await deleteTarea(client,id_tarea)
   } finally{
         client.release()
+  }
+}
+
+export async function selectTareasPorProyectoService(id_proyecto) {
+  const client= await pool.connect();
+  try {
+    const proyecto= await validarProjectId(client,id_proyecto)
+    if (!proyecto) {
+      const error = new Error("Proyecto inexistente");
+      error.status = 404;
+      throw error;
+    }
+
+    const tareas=await selectTareasPorProyecto(client,id_proyecto)
+    return tareas 
+
+  } finally {
+    client.release()
   }
 }

@@ -68,5 +68,7 @@ export async function deleteTarea(client,id_tarea) {
 }
 
 export async function selectTareasPorProyecto(client,id_proyecto) {
-    
+    const query='SELECT ID_TAREA,TITULO,DESCRIPCION,DUE_DATE,ESTADO FROM TASKS WHERE PROJECT_ID=$1'
+    const {rows}=await client.query(query,[id_proyecto])
+    return rows
 }

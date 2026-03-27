@@ -7,6 +7,7 @@ import {
   actualizarTareaInReviewService,
   crearTareaService,
   deleteTareaService,
+  selectTareasPorProyectoService,
   selectTareasService,
 } from "./tareas.services.js";
 
@@ -121,4 +122,19 @@ export const deleteTareaController= async(req,res)=>{
         }
         errorResponse(res,500,"Error en el servidor")
     }
+}
+
+export const selectTareasPorProyectocontroller=async(req,res)=>{
+  const {id_proyecto}=req.body
+
+  try {
+    const tareas= await selectTareasPorProyectoService(id_proyecto)
+    successResponse(res,200,"Peticion exitosa",tareas)
+  } catch (error) {
+    console.error(error)
+        if (error.status) {
+            errorResponse(res,error.status,error.message)
+        }
+        errorResponse(res,500,"Error en el servidor")
+  }
 }
