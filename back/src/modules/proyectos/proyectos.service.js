@@ -1,0 +1,58 @@
+import pool from "../../config/db.js";
+import { validarProjectId, validarUserId } from "../tareas/tareas.repository.js";
+import { archivarProyecto, borrarProyecto, crearProyecto, selectAllProjects } from "./proyectos.repository.js";
+
+export async function crearProyectoService(data,id) {
+    const client= await pool.connect()
+    try {
+        const usuario=await validarUserId(client,id)
+        if (!usuario) {
+            const error=new Error("Usuario inexistente")
+            error.status=404
+            throw error
+        }
+
+        await crearProyecto(client,{owner_id:id,...data})
+    } finally{
+        client.release()
+    }
+}
+export async function borrarProyectoService(id_proyecto,id) {
+    const client= await pool.connect()
+    try {
+        const usuario=await validarUserId(client,id)
+        if (!usuario) {
+            const error=new Error("Usuario inexistente")
+            error.status=404
+            throw error
+        }
+        await borrarProyecto(client,id_proyecto)
+    } finally {
+        client.release()
+    }
+}
+
+export async function archivarProyectoService(id_proyecto) {
+    const client=await pool.connect()
+    try {
+        const proyecto= await validarProjectId(client,id_proyecto)
+        if (!proyecto) {
+            const error=new Error("Este proyecto no existe")
+            error.status=404
+            throw error
+        }
+        await archivarProyecto(client,id_proyecto)
+    } finally {
+        client.release()
+    }
+}
+
+export async function selectAllProjectsService() {
+    const client=await pool.connect()
+    try {
+        const proyectos=await selectAllProjects(client)
+        return proyectos
+    } finally {
+        client.release()
+    }
+}
