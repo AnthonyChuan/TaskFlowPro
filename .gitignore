@@ -2,6 +2,8 @@
 **/.env.local
 **/.env.production
 **/node_modules/
+logs/
+*.log
 frontend/.next/
 frontend/out/
 *.log

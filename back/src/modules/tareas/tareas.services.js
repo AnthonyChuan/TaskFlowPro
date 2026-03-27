@@ -2,8 +2,7 @@ import pool from "../../config/db.js";
 import {
   actualizarTareaDone,
   actualizarTareaInProgress,
-  actualizarTareaInReview,
-  contarTareasPorId,
+  actualizarTareaInReview,  
   crearTarea,
   deleteTarea,
   selectTareasPorId,

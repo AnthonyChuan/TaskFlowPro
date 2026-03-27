@@ -6,10 +6,10 @@ export const validarTarea = [
     .isNumeric()
     .notEmpty()
     .withMessage("La tarea tiene que estar asignada a alguien"),
-  body("nombre")
+  body("titulo")
     .trim()
     .notEmpty()
-    .withMessage("La tarea tiene que tener un nombre"),
+    .withMessage("La tarea tiene que tener un titulo"),
   body("descripcion")
     .trim()
     .notEmpty()

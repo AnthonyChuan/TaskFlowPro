@@ -2,7 +2,7 @@ export async function crearTarea(client,data) {
     const query='INSERT INTO TASKS (ASSIGNED_TO,TITULO,DESCRIPCION,PRIORIDAD,PROJECT_ID,DUE_DATE,CREATED_BY) VALUES($1,$2,$3,$4,$5,$6,$7)'
     const values=[
         data.id_usuario,
-        data.nombre,
+        data.titulo,
         data.descripcion,
         data.prioridad,
         data.project_id,
@@ -65,4 +65,8 @@ export async function actualizarTareaDone(client,id_tarea) {
 export async function deleteTarea(client,id_tarea) {
     const query="DELETE FROM TASKS WHERE ID_TAREA=$1"
     await client.query(query,[id_tarea])
+}
+
+export async function selectTareasPorProyecto(client,id_proyecto) {
+    
 }

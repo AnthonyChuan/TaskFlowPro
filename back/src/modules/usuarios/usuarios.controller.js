@@ -1,5 +1,5 @@
 import { errorResponse, successResponse } from "../../utils/response.js"
-import { cambiarEstadoService, cambiarRolAdminService, cambiarRolPMService } from "./usuarios.service.js"
+import { actualizarUsuarioService, cambiarEstadoService, cambiarRolAdminService, cambiarRolPMService, obtenerUsuariosService, selectMyPerfilService } from "./usuarios.service.js"
 
 export const cambiarRolPMController=async(req,res)=>{
     const id=req.usuario.id
@@ -42,5 +42,42 @@ export const cambiarEstadoController= async(req,res)=>{
             errorResponse(res,error.status,error.message)
         }
         errorResponse(res,500,"Error en el servidor")
+    }
+}
+
+export const actualizarUsuarioController= async(req,res)=>{
+    try {
+        await actualizarUsuarioService(req.body)
+        successResponse(res,200,"Actualizado correctamente")
+    } catch (error) {
+        console.log(error)
+        if (error.status) {
+            errorResponse(res,error.status,error.message)
+        }
+        errorResponse(res,500,"Error en el servidor")
+    }
+}
+
+export const selectMyPerfilController=async(req,res)=>{
+    const id=req.usuario.id
+    try {
+        const usuario=await selectMyPerfilService(id)
+        successResponse(res,200,"Peticion exitosa",usuario)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res,500,"Error en el servidor")
+    }
+}
+
+export const obtenerUsuariosController = async (req, res) => {
+    const page  = parseInt(req.query.page)  || 1
+    const limit = parseInt(req.query.limit) || 10
+
+    try {
+        const { usuarios, meta } = await obtenerUsuariosService(page, limit)
+        successResponse(res, 200, "Usuarios obtenidos", usuarios, meta)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, 500, "Error en el servidor")
     }
 }
