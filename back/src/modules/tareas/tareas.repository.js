@@ -23,9 +23,9 @@ export async function validarProjectId(client,id_proyecto) {
     return rows[0]
 }   
 
-export async function selectTareasPorId(client,{id_usuario,limit,offset}) {
-    const query='SELECT ID_TAREA,TITULO,DESCRIPCION,DUE_DATE,ESTADO FROM TASKS WHERE ASSIGNED_TO=$1 ORDER BY CREATED_AT DESC LIMIT $2 OFFSET $3'
-    const {rows}=await client.query(query,[id_usuario,limit,offset])
+export async function selectTareasPorId(client,id_usuario) {
+    const query="SELECT T.ID_TAREA,T.TITULO,T.DESCRIPCION,T.DUE_DATE,T.ESTADO FROM TASKS T INNER JOIN PROJECTS P ON T.PROJECT_ID=P.ID_PROYECTO WHERE T.ASSIGNED_TO=$1 AND P.ESTADO='ACTIVO' ORDER BY T.CREATED_AT DESC"
+    const {rows}=await client.query(query,[id_usuario])
     return rows
 }
 
@@ -59,5 +59,10 @@ export async function validarTarea(client,id_tarea) {
 
 export async function actualizarTareaDone(client,id_tarea) {
     const query="UPDATE TASKS SET ESTADO='DONE' WHERE ID_TAREA=$1"
+    await client.query(query,[id_tarea])
+}
+
+export async function deleteTarea(client,id_tarea) {
+    const query="DELETE FROM TASKS WHERE ID_TAREA=$1"
     await client.query(query,[id_tarea])
 }
