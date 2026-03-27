@@ -17,6 +17,11 @@ export async function archivarProyecto(client,id_proyecto) {
     const query="UPDATE PROJECTS SET ESTADO='ARCHIVADO',update_at=NOW() where id_proyecto=$1"
     await client.query(query,[id_proyecto])
 }
+export async function verificarProyectoId(client,id_proyecto,id) {
+    const query="SELECT ID_PROYECTO,OWNER_ID FROM PROJECTS WHERE ID_PROYECTO=$1 AND OWNER_ID=$2"
+    const {rows}= await client.query(query,[id_proyecto,id])
+    return rows[0]
+}
 
 export async function selectAllProjects(client) {
     const query="SELECT ID_PROYECTO,OWNER_ID,NOMBRE,DESCRIPCION,ESTADO FROM PROJECTS where estado='ACTIVO'"
@@ -25,7 +30,7 @@ export async function selectAllProjects(client) {
 }
 
 export async function selectMyProjects(client,id_usuario) {
-    const query="SELECT ID_PROYECTOS,NOMBRE,DESCRIPCION,ESTADO FROM PROJECT WHERE OWNER_ID=$1"
+    const query="SELECT ID_PROYECTO,NOMBRE,DESCRIPCION,ESTADO FROM PROJECTS WHERE OWNER_ID=$1 and estado='ACTIVO'"
     const {rows}= await client.query(query,[id_usuario])
     return rows
 }
