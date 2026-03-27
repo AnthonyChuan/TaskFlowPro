@@ -14,6 +14,6 @@ tareasRouter.put("/tareas/curso",authenticateToken,authorizeRole([2,3]),actualiz
 tareasRouter.put("/tareas/review",authenticateToken,authorizeRole([2,3]),actualizarTareaInReviewController);
 tareasRouter.put("/tareas/done/dev",authenticateToken,authorizeRole([1]),actualizarTareaDoneDeveloperController);
 tareasRouter.put("/tareas/done",authenticateToken,authorizeRole([2,3]),actualizaTareaDoneController)
-tareasRouter.get("/tareas/proyecto",authenticateToken,selectTareasPorProyectocontroller)
+tareasRouter.get("/tareas/proyecto",authenticateToken,authorizeRole([2,3]),selectTareasPorProyectocontroller)
 
 export default tareasRouter
