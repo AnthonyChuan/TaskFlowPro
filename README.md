@@ -141,6 +141,10 @@ Una vez levantado el backend, accede a la documentación interactiva:
 ```
 http://localhost:3001/api-docs
 ```
+o tambien puedes acceder a:
+```
+https://www.mintlify.com/explore/AnthonyChuan/TaskFlowPro
+```
 
 ### Endpoints principales
 
