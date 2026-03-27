@@ -32,3 +32,27 @@ export const validarTarea = [
       return true;
     }),
 ];
+
+export const validarEditarTarea=[
+    body("titulo")
+    .trim()
+    .notEmpty()
+    .withMessage("La tarea tiene que tener un titulo"),
+    body("descripcion")
+    .trim()
+    .notEmpty()
+    .withMessage("La tarea tiene que tener una descripcion"),
+    body("prioridad")
+    .trim()
+    .notEmpty()
+    .withMessage("La tarea debe tener un grado de prioridad"),
+     body("due_date")
+    .isDate()
+    .withMessage("Fecha invalida")
+    .custom((fecha) => {
+      if (new Date(fecha) < new Date().setHours(0, 0, 0, 0)) {
+        throw new Error("No se pueden reservar citas en fechas pasadas");
+      }
+      return true;
+    }),
+]

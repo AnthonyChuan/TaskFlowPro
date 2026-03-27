@@ -1,5 +1,5 @@
 import { errorResponse, successResponse } from "../../utils/response.js";
-import { archivarMyProjectService, archivarProyectoService, borrarProyectoService, crearProyectoService, selectAllProjectsService, selectMyProjectsService } from "./proyectos.service.js";
+import { archivarMyProjectService, archivarProyectoService, borrarProyectoService, crearProyectoService, editarProyectoService, selectAllProjectsService, selectMyProjectsService } from "./proyectos.service.js";
 
 export const crearProyectoController=async(req,res)=>{
     const id=req.usuario.id;
@@ -74,5 +74,18 @@ export const selectMyProjectsController=async(req,res)=>{
     } catch (error) {
         console.log(error)
         errorResponse(res,500,"Error en el servidor")
+    }
+}
+
+export const editarProyectoController = async (req, res) => {
+    const id  = req.usuario.id
+    const rol = req.usuario.rol
+    try {
+        await editarProyectoService(req.body, id, rol)
+        successResponse(res, 200, "Proyecto actualizado correctamente")
+    } catch (error) {
+        console.log(error)
+        if (error.status) return errorResponse(res, error.status, error.message)
+        errorResponse(res, 500, "Error en el servidor")
     }
 }

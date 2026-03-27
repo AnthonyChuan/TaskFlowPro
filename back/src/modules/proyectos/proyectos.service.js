@@ -1,6 +1,6 @@
 import pool from "../../config/db.js";
 import { validarProjectId, validarUserId } from "../tareas/tareas.repository.js";
-import { archivarProyecto, borrarProyecto, crearProyecto, selectAllProjects, selectMyProjects, verificarProyectoId } from "./proyectos.repository.js";
+import { archivarProyecto, borrarProyecto, crearProyecto, editarProyecto, selectAllProjects, selectMyProjects, verificarProyectoId } from "./proyectos.repository.js";
 
 export async function crearProyectoService(data,id) {
     const client= await pool.connect()
@@ -85,6 +85,23 @@ export async function selectMyProjectsService(id_usuario) {
         const proyectos=await selectMyProjects(client,id_usuario)
         return proyectos
     } finally{
+        client.release()
+    }
+}
+
+export async function editarProyectoService(data, id, rol) {
+    const client = await pool.connect()
+    try {
+        if (rol === 2) {
+            const proyecto = await validarProjectId(client, data.id_proyecto)
+            if (proyecto.owner_id !== id) {
+                const error = new Error("No puedes editar proyectos de otro")
+                error.status = 403
+                throw error
+            }
+        }
+        await editarProyecto(client, data)
+    } finally {
         client.release()
     }
 }

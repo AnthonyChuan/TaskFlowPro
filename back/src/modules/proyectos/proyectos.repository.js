@@ -34,3 +34,12 @@ export async function selectMyProjects(client,id_usuario) {
     const {rows}= await client.query(query,[id_usuario])
     return rows
 }
+
+export async function editarProyecto(client, data) {
+    const query = `
+        UPDATE PROJECTS 
+        SET NOMBRE=$1, DESCRIPCION=$2, ESTADO=$3, UPDATE_AT=NOW()
+        WHERE ID_PROYECTO=$4
+    `
+    await client.query(query, [data.nombre, data.descripcion, data.estado, data.id_proyecto])
+}

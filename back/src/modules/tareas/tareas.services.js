@@ -3,8 +3,11 @@ import {
   actualizarTareaDone,
   actualizarTareaInProgress,
   actualizarTareaInReview,  
+  contarTareas,  
   crearTarea,
   deleteTarea,
+  editarTarea,
+  selectAllTareas,
   selectTareasPorId,
   selectTareasPorProyecto,
   validarDuenoTarea,
@@ -98,7 +101,7 @@ export async function actualizarTareaInReviewService(id_tarea) {
   }
 }
 
-export async function actualizarTareaDoneDeveloperService(id_tarea, id) {
+export async function actualizarTareaInReviewDeveloperService(id_tarea, id) {
   const client = await pool.connect();
   try {
     const tarea = await validarDuenoTarea(client, id_tarea);
@@ -114,7 +117,7 @@ export async function actualizarTareaDoneDeveloperService(id_tarea, id) {
       error.status = 401;
       throw error;
     }
-    await actualizarTareaDone(client, id_tarea);
+    await actualizarTareaInReview(client, id_tarea);
   } finally {
     client.release();
   }
@@ -167,3 +170,34 @@ export async function selectTareasPorProyectoService(id_proyecto) {
     client.release()
   }
 }
+
+export async function selectAllTareasService(page,limit) {
+  const client= await pool.connect()
+  try {
+    const offset=(page-1)*limit
+    const tareas=await selectAllTareas(client,{limit,offset})
+    const total= await contarTareas(client)
+
+    return{
+      tareas,
+      meta:{
+        page,
+        limit,
+        total,
+        totalPages:Math.ceil(total/limit)
+      }
+    }
+
+  } finally {
+    client.release()
+  }
+}
+
+ export async function editarTareaService(data) {
+  const client=await pool.connect()
+  try {
+    await editarTarea(client,{...data})
+  } finally{
+    client.release()
+  }
+ }

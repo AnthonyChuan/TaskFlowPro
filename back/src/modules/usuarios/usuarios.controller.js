@@ -1,5 +1,5 @@
 import { errorResponse, successResponse } from "../../utils/response.js"
-import { actualizarUsuarioService, cambiarEstadoService, cambiarRolAdminService, cambiarRolPMService, obtenerUsuariosService, selectMyPerfilService } from "./usuarios.service.js"
+import { actualizarUsuarioAdminService, actualizarUsuarioService, buscarUsuariosService, cambiarEstadoService, cambiarRolAdminService, cambiarRolPMService, obtenerUsuariosService, selectMyPerfilService } from "./usuarios.service.js"
 
 export const cambiarRolPMController=async(req,res)=>{
     const id=req.usuario.id
@@ -76,6 +76,27 @@ export const obtenerUsuariosController = async (req, res) => {
     try {
         const { usuarios, meta } = await obtenerUsuariosService(page, limit)
         successResponse(res, 200, "Usuarios obtenidos", usuarios, meta)
+    } catch (error) {
+        console.log(error)
+        errorResponse(res, 500, "Error en el servidor")
+    }
+}
+export const actualizarUsuarioAdminController = async (req, res) => {
+    try {
+        await actualizarUsuarioAdminService(req.body)
+        successResponse(res, 200, "Usuario actualizado correctamente")
+    } catch (error) {
+        console.log(error)
+        if (error.status) return errorResponse(res, error.status, error.message)
+        errorResponse(res, 500, "Error en el servidor")
+    }
+}
+
+export const buscarUsuariosController = async (req, res) => {
+    const { q } = req.query
+    try {
+        const usuarios = await buscarUsuariosService(q)
+        successResponse(res, 200, "Búsqueda exitosa", usuarios)
     } catch (error) {
         console.log(error)
         errorResponse(res, 500, "Error en el servidor")

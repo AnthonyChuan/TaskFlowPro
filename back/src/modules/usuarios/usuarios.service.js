@@ -1,6 +1,6 @@
 import pool from "../../config/db.js";
 import { validarUserId } from "../tareas/tareas.repository.js";
-import { actualizarUsuario, cambiarEstado, cambiarRolAdmin, cambiarRolPM, contarUsuarios, obtenerUsuarios, selectMyPerfil } from "./usuarios.repository.js";
+import { actualizarUsuario, actualizarUsuarioAdmin, buscarUsuarios, cambiarEstado, cambiarRolAdmin, cambiarRolPM, contarUsuarios, obtenerUsuarios, selectMyPerfil } from "./usuarios.repository.js";
 
 export async function cambiarRolPMService(id_usuario,id) {
     const client= await pool.connect()
@@ -89,6 +89,24 @@ export async function obtenerUsuariosService(page, limit) {
                 totalPages: Math.ceil(total / limit)
             }
         }
+    } finally {
+        client.release()
+    }
+}
+
+export async function actualizarUsuarioAdminService(data) {
+    const client = await pool.connect()
+    try {
+        await actualizarUsuarioAdmin(client, data)
+    } finally {
+        client.release()
+    }
+}
+
+export async function buscarUsuariosService(query) {
+    const client = await pool.connect()
+    try {
+        return await buscarUsuarios(client, query)
     } finally {
         client.release()
     }

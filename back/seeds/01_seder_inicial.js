@@ -98,8 +98,5 @@ export async function seed(knex) {
         { contenido: "Endpoints listos y testeados en Postman", task_id: tarea3.id_tarea, user_id: carlos.id_usuario },
     ])
 
-    console.log("✅ Seeder ejecutado correctamente")
-    console.log(`   👤 Usuarios: ${admin.nombre} (Admin), ${maria.nombre} (PM), ${carlos.nombre} (Dev)`)
-    console.log(`   📁 Proyectos: ${proyectoA.nombre}, ${proyectoB.nombre}`)
-    console.log(`   📋 Tareas creadas: ${[tarea1, tarea2, tarea3, tarea4, tarea5].map(t => t.titulo).join(", ")}`)
+    console.log("Seeder ejecutado correctamente")
 }

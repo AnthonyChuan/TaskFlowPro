@@ -24,7 +24,7 @@ export async function validarProjectId(client,id_proyecto) {
 }   
 
 export async function selectTareasPorId(client,id_usuario) {
-    const query="SELECT T.ID_TAREA,T.TITULO,T.DESCRIPCION,T.DUE_DATE,T.ESTADO FROM TASKS T INNER JOIN PROJECTS P ON T.PROJECT_ID=P.ID_PROYECTO WHERE T.ASSIGNED_TO=$1 AND P.ESTADO='ACTIVO' ORDER BY T.CREATED_AT DESC"
+    const query="SELECT T.ID_TAREA,T.TITULO,T.DESCRIPCION,T.DUE_DATE,T.ESTADO,T.PRIORIDAD FROM TASKS T INNER JOIN PROJECTS P ON T.PROJECT_ID=P.ID_PROYECTO WHERE T.ASSIGNED_TO=$1 AND P.ESTADO='ACTIVO' ORDER BY T.CREATED_AT DESC"
     const {rows}=await client.query(query,[id_usuario])
     return rows
 }
@@ -71,4 +71,22 @@ export async function selectTareasPorProyecto(client,id_proyecto) {
     const query='SELECT ID_TAREA,TITULO,DESCRIPCION,DUE_DATE,ESTADO FROM TASKS WHERE PROJECT_ID=$1'
     const {rows}=await client.query(query,[id_proyecto])
     return rows
+}
+
+export async function editarTarea(client,data) {
+    const query='UPDATE TASKS SET TITULO=$1,DESCRIPCION=$2,DUE_DATE=$3,PRIORIDAD=$4 WHERE ID_TAREA=$5'
+    const values=[data.titulo,data.descripcion,data.due_date,data.prioridad,data.id_tarea]
+    await client.query(query,values)
+}   
+
+export async function selectAllTareas(client,{limit,offset}) {
+    const query='SELECT ID_TAREA,TITULO,DESCRIPCION,DUE_DATE,ESTADO,PRIORIDAD FROM TASKS ORDER BY CREATED_AT DESC LIMIT $1 OFFSET $2'
+    const { rows } = await client.query(query, [limit, offset])
+    return rows
+}
+
+export async function contarTareas(client) {
+    const query='SELECT COUNT(*) FROM TASKS'
+    const {rows}=await client.query(query)
+    return parseInt(rows[0].count)
 }
